@@ -1,6 +1,6 @@
 # lagou-downloader
 
-> lagou-downloader是拉勾教育课程下载器, 支持PDF/视频/音频下载
+> lagou-downloader是拉勾教育课程下载器, 支持PDF/视频/音频下载。
 
 # 安装环境
 
@@ -38,40 +38,13 @@ pip3 install -r requirements.txt
 
 显示帮助信息, 当在你输入错误命令的时候, 也会显示帮助信息。
 
-```
-=>请输入子命令: help 
-LaGou Downloader
-- Version: v1.0.0
-- Chrome Driver: OK
-- FFmpeg: OK
-- Python: OK
-+--------+-------------------------------------+
-| 命令   | 作用                                |
-+--------+-------------------------------------+
-| pdf    | 保存专栏为PDF                       |
-| all    | 保存专栏的全部数据, 包括PDF和音视频 |
-| help   | 显示帮助信息                        |
-| list   | 列出已经购买的全部课程              |
-| quit   | 退出                                |
-| login  | 登陆拉勾教育                        |
-| video  | 保存专栏为视频                      |
-| audio  | 保存专栏为音频                      |
-| detail | 获取专栏详细信息                    |
-+--------+-------------------------------------+
-```
+![assets/lagou-downloader-help-command.png](assets/lagou-downloader-help-command.png)
 
 ## login
 
 登录到拉勾教育。
 
-```
-=>请输入子命令: login
-+--------+--------+------------+
-| 昵称   | ID     | 已购课程数 |
-+--------+--------+------------+
-|        |        | 18         |
-+--------+--------+------------+
-```
+![assets/lagou-downloader-login-command.png](assets/lagou-downloader-login-command.png)
 
 
 
