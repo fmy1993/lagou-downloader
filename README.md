@@ -46,5 +46,14 @@ pip3 install -r requirements.txt
 
 ![assets/lagou-downloader-login-command.png](assets/lagou-downloader-login-command.png)
 
+## list
 
+登录后可以列出购买的全部课程, 试读课程也会列出来。
 
+![assets/lagou-downloader-list-command.png](assets/lagou-downloader-list-command.png)
+
+## quit & Control-C(Ctrl+C)
+
+退出下载器, lagou-downloader会自动将未完成的任务保存app.dat文件, 下次启动lagou-downloader将会提示是否进行未完成的任务。
+
+![assets/lagou-downloader-quit-command.png](assets/lagou-downloader-quit-command.png)
