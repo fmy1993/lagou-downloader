@@ -261,22 +261,25 @@ class App:
                             [course_id, course_name, section_id, section_name, lesson_id, lesson_name, lesson_video_id,
                              lesson_audio_id, lesson_status, lesson_video_duration, lesson_audio_duration])
 
+                # 根据功能类型进行操作
                 if op_type == 'SHOW':
                     print(table)
-                elif op_type == 'PDF':
-                    pass
-                elif op_type == 'VIDEO':
-                    pass
-                elif op_type == 'AUDIO':
-                    pass
-                elif op_type == 'EPUB':
-                    pass
-                elif op_type == 'MD':
-                    pass
-                elif op_type == 'ALL':
-                    pass
                 else:
-                    pass
+                    save_path = os.path.join(os.getcwd(), course_name)
+                    for item in pre_process_items:
+                        if op_type == 'PDF':
+                            html_content = self.__get_html_content(item=item)
+
+                        elif op_type == 'VIDEO':
+                            pass
+                        elif op_type == 'AUDIO':
+                            pass
+                        elif op_type == 'EPUB':
+                            pass
+                        elif op_type == 'MD':
+                            pass
+                        elif op_type == 'ALL':
+                            pass
             else:
                 print(content['message'])
 
@@ -366,53 +369,80 @@ class App:
                 print('=>没有配置PDF生成器安装路径, 正在自动检测..')
                 # 不支持macOS 32系统
                 if sys.platform == 'darwin':
-                    if os.path.exists('/usr/local/bin/wkhtmltopdf'):
-                        self.__tools_pdfkit_conf_install_path = '/usr/local/bin/wkhtmltopdf'
+                    if os.path.exists(os.path.join('usr', 'local', 'bin', 'wkhtmltopdf')):
+                        self.__tools_pdfkit_conf_install_path = os.path.join('usr', 'local', 'bin', 'wkhtmltopdf')
                     else:
                         print('=>没有检测到wkhtmltopdf')
-                    if os.path.exists('/usr/local/bin/wkhtmltoimage'):
-                        self.__tools_imgkit_conf_install_path = '/usr/local/bin/wkhtmltoimage'
+                    if os.path.exists(os.path.join('usr', 'local', 'bin', 'wkhtmltoimage')):
+                        self.__tools_imgkit_conf_install_path = os.path.join('usr', 'local', 'bin', 'wkhtmltoimage')
                     else:
                         print('=>没有检测到wkhtmltoimage')
                 elif sys.platform == 'win32':
+                    windows_system_drive = os.getenv('SystemDrive')
+                    if windows_system_drive is None:
+                        windows_system_drive = 'C:'
+
+                    if len(windows_system_drive.strip()) <= 0:
+                        windows_system_drive = 'C:'
+
+                    windows_system_drive += '\\'
+
                     # 判断Windows系统是否为64位
-                    if os.path.exists('C:/Program Files (x86)'):
+                    if os.path.exists(os.path.join(windows_system_drive, 'Program Files (x86)')):
                         wkhtmltopdf_flag = False
                         wkhtmltoimage_flag = False
 
                         # 在64位程序安装目录下查找安装文件
-                        if os.path.exists('C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf'):
-                            self.__tools_imgkit_conf_install_path = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf'
+                        if os.path.exists(os.path.join(windows_system_drive, 'Program Files', 'wkhtmltopdf', 'bin',
+                                                       'wkhtmltopdf')):
+                            self.__tools_imgkit_conf_install_path = os.path.join(windows_system_drive, 'Program Files',
+                                                                                 'wkhtmltopdf', 'bin', 'wkhtmltopdf')
                         else:
                             wkhtmltopdf_flag = True
                             print('=>没有检测到wkhtmltopdf')
-                        if os.path.exists('C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf'):
-                            self.__tools_imgkit_conf_install_path = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltoimage'
+                        if os.path.exists(os.path.join(windows_system_drive, 'Program Files', 'wkhtmltopdf', 'bin',
+                                                       'wkhtmltoimage')):
+                            self.__tools_imgkit_conf_install_path = os.path.join(windows_system_drive, 'Program Files',
+                                                                                 'wkhtmltopdf', 'bin', 'wkhtmltoimage')
                         else:
                             wkhtmltoimage_flag = True
                             print('=>没有检测到wkhtmltoimage')
 
                         # 在32位程序安装目录下查找安装文件
                         if wkhtmltopdf_flag:
-                            if os.path.exists('C:/Program Files (x86)/wkhtmltopdf/bin/wkhtmltopdf'):
-                                self.__tools_imgkit_conf_install_path = 'C:/Program Files (x86)/wkhtmltopdf/bin/wkhtmltopdf'
+                            if os.path.exists(
+                                    os.path.join(windows_system_drive, 'Program Files (x86)', 'wkhtmltopdf', 'bin',
+                                                 'wkhtmltopdf')):
+                                self.__tools_imgkit_conf_install_path = os.path.join(windows_system_drive,
+                                                                                     'Program Files (x86)',
+                                                                                     'wkhtmltopdf', 'bin',
+                                                                                     'wkhtmltopdf')
                             else:
                                 wkhtmltopdf_flag = True
                                 print('=>没有检测到wkhtmltopdf')
                         if wkhtmltoimage_flag:
-                            if os.path.exists('C:/Program Files (x86)/wkhtmltopdf/bin/wkhtmltopdf'):
-                                self.__tools_imgkit_conf_install_path = 'C:/Program Files (x86)/wkhtmltopdf/bin/wkhtmltoimage'
+                            if os.path.exists(
+                                    os.path.join(windows_system_drive, 'Program Files (x86)', 'wkhtmltopdf', 'bin',
+                                                 'wkhtmltoimage')):
+                                self.__tools_imgkit_conf_install_path = os.path.join(windows_system_drive,
+                                                                                     'Program Files (x86)',
+                                                                                     'wkhtmltopdf', 'bin',
+                                                                                     'wkhtmltoimage')
                             else:
                                 wkhtmltoimage_flag = True
                                 print('=>没有检测到wkhtmltoimage')
                     else:
                         # 在32位程序安装目录下查找安装文件
-                        if os.path.exists('C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf'):
-                            self.__tools_imgkit_conf_install_path = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf'
+                        if os.path.exists(os.path.join(windows_system_drive, 'Program Files', 'wkhtmltopdf', 'bin',
+                                                       'wkhtmltopdf')):
+                            self.__tools_imgkit_conf_install_path = os.path.join(windows_system_drive, 'Program Files',
+                                                                                 'wkhtmltopdf', 'bin', 'wkhtmltopdf')
                         else:
                             print('=>没有检测到wkhtmltopdf')
-                        if os.path.exists('C:/Program Files/wkhtmltopdf/bin/wkhtmltoimage'):
-                            self.__tools_imgkit_conf_install_path = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltoimage'
+                        if os.path.exists(os.path.join(windows_system_drive, 'Program Files', 'wkhtmltopdf', 'bin',
+                                                       'wkhtmltoimage')):
+                            self.__tools_imgkit_conf_install_path = os.path.join(windows_system_drive, 'Program Files',
+                                                                                 'wkhtmltopdf', 'bin', 'wkhtmltoimage')
                         else:
                             print('=>没有检测到wkhtmltoimage')
                 elif sys.platform == 'linux2':
@@ -432,6 +462,7 @@ class App:
 
         print('=>配置加载完成')
         print('=>正在读取断点任务..')
+        # TODO: 加载断点任务
 
 
 if __name__ == '__main__':
