@@ -2,7 +2,7 @@
 
 > lagou-downloader是拉勾教育课程下载器, 支持PDF/视频/音频下载。
 
-# 安装环境
+# 一、安装环境
 
 lagou-downloader使用Python 3.x开发, 所以你应该具备`python3`和`pip3`指令。你可以到 [Python官网下载中心](https://www.python.org/downloads/) 下载到最新的Python版本。将lagou-downloader仓库Clone到本地:
 
@@ -26,7 +26,7 @@ pip3 install -r requirements.txt
 
 将HTML转换为PDF需要安装`wk<html>TOpdf`插件和`wk<html>TOimage`插件, 在 [https://wkhtmltopdf.org/downloads.html](https://wkhtmltopdf.org/downloads.html) 下载。
 
-# 配置文件
+# 二、配置文件
 
 `config.ini`是lagou-downloader的配置文件, 主要针对下载器核心的配置是`app`区块:
 
@@ -39,39 +39,44 @@ pip3 install -r requirements.txt
 - `wkhtmltopdf`用于配置生成PDF工具的路径
 - `wkhtmltoimage`用于配置生成图片工具的路径
 
-# 命令解释
+# 三、命令解释
 
-## help
+## (1) help
 
 显示帮助信息, 当在你输入错误命令的时候, 也会显示帮助信息。
 
 ![assets/lagou-downloader-help-command.png](assets/lagou-downloader-help-command.png)
 
-## login
+## (2) login
 
 登录到拉勾教育。
 
 ![assets/lagou-downloader-login-command.png](assets/lagou-downloader-login-command.png)
 
-## list
+## (3) list
 
 登录后可以列出购买的全部课程, 试读课程也会列出来。
 
 ![assets/lagou-downloader-list-command.png](assets/lagou-downloader-list-command.png)
 
-## detail
+## (4) detail
 
 显示专栏的课程详情。输出专栏ID即可, 如果输入quit那么将会推出详情查询流程。
 
 ![assets/lagou-downloader-detail-command.png](assets/lagou-downloader-detail-command.png)
 
-## quit & Control-C(Ctrl+C)
+## (5) quit & Control-C(Ctrl+C)
 
 退出下载器, lagou-downloader会自动将未完成的任务保存app.dat文件, 下次启动lagou-downloader将会提示是否进行未完成的任务。
 
 ![assets/lagou-downloader-quit-command.png](assets/lagou-downloader-quit-command.png)
 
-# 其他说明
+# 四、TODO
+
+- 支持Linux系统下输出PDF图片
+- 支持自动登录
+
+# 五、其他说明
 
 lagou-downloader使用MIT协议发布, 仅作为交流学习使用, 下载后请在24小时内删除。
 

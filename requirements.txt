@@ -4,6 +4,8 @@ chardet==4.0.0
 distlib==0.3.1
 filelock==3.0.12
 idna==2.10
+imgkit==1.0.5
+pdfkit==0.6.1
 prettytable==2.1.0
 requests==2.25.1
 six==1.15.0

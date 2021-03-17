@@ -364,12 +364,69 @@ class App:
         try:
             if config['tools']['wkhtmltopdf'] is None:
                 print('=>没有配置PDF生成器安装路径, 正在自动检测..')
+                # 不支持macOS 32系统
+                if sys.platform == 'darwin':
+                    if os.path.exists('/usr/local/bin/wkhtmltopdf'):
+                        self.__tools_pdfkit_conf_install_path = '/usr/local/bin/wkhtmltopdf'
+                    else:
+                        print('=>没有检测到wkhtmltopdf')
+                    if os.path.exists('/usr/local/bin/wkhtmltoimage'):
+                        self.__tools_imgkit_conf_install_path = '/usr/local/bin/wkhtmltoimage'
+                    else:
+                        print('=>没有检测到wkhtmltoimage')
+                elif sys.platform == 'win32':
+                    # 判断Windows系统是否为64位
+                    if os.path.exists('C:/Program Files (x86)'):
+                        wkhtmltopdf_flag = False
+                        wkhtmltoimage_flag = False
+
+                        # 在64位程序安装目录下查找安装文件
+                        if os.path.exists('C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf'):
+                            self.__tools_imgkit_conf_install_path = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf'
+                        else:
+                            wkhtmltopdf_flag = True
+                            print('=>没有检测到wkhtmltopdf')
+                        if os.path.exists('C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf'):
+                            self.__tools_imgkit_conf_install_path = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltoimage'
+                        else:
+                            wkhtmltoimage_flag = True
+                            print('=>没有检测到wkhtmltoimage')
+
+                        # 在32位程序安装目录下查找安装文件
+                        if wkhtmltopdf_flag:
+                            if os.path.exists('C:/Program Files (x86)/wkhtmltopdf/bin/wkhtmltopdf'):
+                                self.__tools_imgkit_conf_install_path = 'C:/Program Files (x86)/wkhtmltopdf/bin/wkhtmltopdf'
+                            else:
+                                wkhtmltopdf_flag = True
+                                print('=>没有检测到wkhtmltopdf')
+                        if wkhtmltoimage_flag:
+                            if os.path.exists('C:/Program Files (x86)/wkhtmltopdf/bin/wkhtmltopdf'):
+                                self.__tools_imgkit_conf_install_path = 'C:/Program Files (x86)/wkhtmltopdf/bin/wkhtmltoimage'
+                            else:
+                                wkhtmltoimage_flag = True
+                                print('=>没有检测到wkhtmltoimage')
+                    else:
+                        # 在32位程序安装目录下查找安装文件
+                        if os.path.exists('C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf'):
+                            self.__tools_imgkit_conf_install_path = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf'
+                        else:
+                            print('=>没有检测到wkhtmltopdf')
+                        if os.path.exists('C:/Program Files/wkhtmltopdf/bin/wkhtmltoimage'):
+                            self.__tools_imgkit_conf_install_path = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltoimage'
+                        else:
+                            print('=>没有检测到wkhtmltoimage')
+                elif sys.platform == 'linux2':
+                    pass
+                elif sys.platform == 'linux':
+                    pass
         except KeyError:
             pass
 
         try:
             if config['tools']['wkhtmltoimage'] is None:
                 print('=>没有配置图片生成器安装路径, 正在自动检测..')
+                if sys.platform == 'darwin':
+                    pass
         except KeyError:
             pass
 
