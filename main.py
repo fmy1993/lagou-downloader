@@ -1,10 +1,17 @@
 #! /usr/bin/env python3
 # -*-coding:utf-8-*-
 
+import os
+import sys
 import base64
+import imgkit
+import pdfkit
 import requests
 import configparser
 from prettytable import PrettyTable
+
+__author__ = 'bluemiaomiao'
+__version__ = '1.0.0'
 
 
 class App:
@@ -25,31 +32,17 @@ class App:
 
     __all_courses = []
 
-    __request_freq = -1
+    __app_cookie = None
+    __app_request_freq = -1
+    __tools_pdfkit_conf_install_path = None
+    __tools_imgkit_conf_install_path = None
 
     def __convert_html_to_pdf(self, html, f_pdf):
         pass
 
     def login(self):
-        config = configparser.ConfigParser()
-
         try:
-            config.read("config.ini")
-        except:
-            print("=>读取config.ini文件失败")
-            return False
-
-        if config['app']['cookie'] is None:
-            print("=>登录失败, Cookie编码为空")
-            return False
-
-        if config['app']['request_freq'] is None:
-            print("=>获取请求速率失败, 可能没有正确配置")
-            return False
-
-        try:
-            self.__REQ_PARTIAL_HEADERS['Cookie'] = base64.b64decode(s=config['app']['cookie']).decode(encoding='utf-8')
-            self.__request_freq = config['app']['request_freq']
+            self.__REQ_PARTIAL_HEADERS['Cookie'] = base64.b64decode(s=self.__app_cookie).decode(encoding='utf-8')
         except:
             print("=>Base64解码失败")
             return False
@@ -97,6 +90,7 @@ class App:
             table.align['专栏更新进度'] = "l"
             table.align['专栏ID'] = "l"
             courses = content['content']['allCoursePurchasedRecord'][0]['courseRecordList']
+            self.__all_courses = []
             for course in courses:
                 table.add_row([course['name'], course['lastLearnLessonName'], course['updateProgress'], course['id']])
                 self.__all_courses.append(str(course['id']))
@@ -105,26 +99,28 @@ class App:
             print('=>请求出错')
 
     def show_usage_info(self):
-
         print("LaGou Downloader")
-        print("- Version: v1.0.0")
-        print("- Chrome Driver: OK")
-        print("- FFmpeg: OK")
-        print("- Python: OK")
+        print("- Author: " + __author__)
+        print("- Version: " + __version__)
+        print("- Python: " + sys.version)
+        print("- wk<html>TOpdf: " + pdfkit.__version__)
+        print("- wk<html>TOimg: " + imgkit.__version__)
 
         table = PrettyTable()
         table.field_names = ['命令', '作用']
         table.align['命令'] = "l"
         table.align['作用'] = "l"
-        table.add_row(['pdf', '保存专栏为PDF'])
-        table.add_row(['all', '保存专栏的全部数据, 包括PDF和音视频'])
-        table.add_row(['help', '显示帮助信息'])
-        table.add_row(['list', '列出已经购买的全部课程'])
-        table.add_row(['quit', '退出'])
         table.add_row(['login', '登陆拉勾教育'])
+        table.add_row(['list', '列出已经购买的全部课程'])
+        table.add_row(['detail', '获取专栏详细信息'])
+        table.add_row(['pdf', '保存专栏为PDF'])
+        table.add_row(['epub', '保存专栏为EPUB'])
+        table.add_row(['markdown', '保存专栏为MarkDown'])
         table.add_row(['video', '保存专栏为视频'])
         table.add_row(['audio', '保存专栏为音频'])
-        table.add_row(['detail', '获取专栏详细信息'])
+        table.add_row(['all', '保存专栏的全部数据, 包括PDF和音视频'])
+        table.add_row(['help', '显示帮助信息'])
+        table.add_row(['quit', '退出'])
         print(table)
 
     def get_course_detail(self, op_type):
@@ -132,6 +128,9 @@ class App:
 
         if i_course_id is None:
             print("=>输入的ID不正确")
+            return
+
+        if i_course_id == 'quit':
             return
 
         if i_course_id not in self.__all_courses:
@@ -217,6 +216,7 @@ class App:
                                 'section_id': section_id,
                                 'section_name': section_name,
                                 'course_id': course_id,
+                                'course_name': course_name,
                                 'lesson_id': lesson_id,
                                 'lesson_app_id': lesson_app_id,
                                 'lesson_name': lesson_name,
@@ -264,13 +264,17 @@ class App:
                 if op_type == 'SHOW':
                     print(table)
                 elif op_type == 'PDF':
-                    self.__create_pdf_file(items=pre_process_items)
+                    pass
                 elif op_type == 'VIDEO':
-                    self.__create_video_file(items=pre_process_items)
+                    pass
                 elif op_type == 'AUDIO':
-                    self.__create_audio_file(items=pre_process_items)
+                    pass
+                elif op_type == 'EPUB':
+                    pass
+                elif op_type == 'MD':
+                    pass
                 elif op_type == 'ALL':
-                    self.__create_all_file(items=pre_process_items)
+                    pass
                 else:
                     pass
             else:
@@ -279,26 +283,103 @@ class App:
         else:
             print("=>请求出错")
 
-    def __create_pdf_file(self, items):
-        print("=>开始创建PDF文件..")
+    def __get_html_content(self, item):
+        item_res = requests.get(self.__GET_USER_LESSON_DETAIL_URI_PARTIAL + item['lesson_id'],
+                                headers=self.__REQ_PARTIAL_HEADERS)
+        if item_res.status_code == 200:
+            content = item_res.json()
+            if str(content['state']) == "1":
+                html_content = str(content['content']['textContent'])
+                return html_content
+            return None
 
-    def __create_video_file(self, items):
-        print("=>开始下载视频文件..")
+        return None
 
-    def __create_audio_file(self, items):
-        print("=>开始下载音频文件..")
+    def __create_pdf_file(self, html_content, filename):
+        pass
 
-    def __create_all_file(self, items):
-        self.__create_pdf_file(items=items)
-        self.__create_video_file()
-        self.__create_audio_file()
+    def __create_video_file(self, item):
+        pass
+
+    def __create_audio_file(self, item):
+        pass
+
+    def __create_epub_file(self, html_content, filename):
+        pass
+
+    def __create_markdown_file(self, html_content, filename):
+        pass
+
+    def __create_all_file(self, html_content, filename, item):
+        self.__create_pdf_file(html_content=html_content, filename=filename)
+        self.__create_video_file(item=item)
+        self.__create_audio_file(item=item)
+        self.__create_epub_file(html_content=html_content, filename=filename)
+        self.__create_markdown_file(html_content=html_content, filename=filename)
 
     def __save_tasks(self, items):
         print("=>任务持久化成功")
 
+    def prepare_app(self):
+        config = configparser.ConfigParser()
+
+        print('=>正在加载配置...')
+
+        try:
+            config.read("config.ini")
+        except:
+            print("=>读取config.ini文件失败")
+            return
+
+        try:
+            if config['app'] is None:
+                print('=>没有配置app区块')
+                return
+        except KeyError:
+            print('=>没有配置app区块')
+            return
+
+        try:
+            if config['tools'] is None:
+                print('=>没有配置tools区块')
+                return
+        except KeyError:
+            print('=>没有配置tools区块')
+            return
+
+        try:
+            if config['app']['cookie'] is None:
+                print('=>没有配置Cookie')
+                return
+        except KeyError:
+            print('=>没有配置Cookie')
+            return
+
+        try:
+            if config['app']['request_freq'] is None:
+                print('=>没有配置下载速率, 使用默认值')
+        except KeyError:
+            pass
+
+        try:
+            if config['tools']['wkhtmltopdf'] is None:
+                print('=>没有配置PDF生成器安装路径, 正在自动检测..')
+        except KeyError:
+            pass
+
+        try:
+            if config['tools']['wkhtmltoimage'] is None:
+                print('=>没有配置图片生成器安装路径, 正在自动检测..')
+        except KeyError:
+            pass
+
+        print('=>配置加载完成')
+        print('=>正在读取断点任务..')
+
 
 if __name__ == '__main__':
     app = App()
+    app.prepare_app()
 
     try:
         while True:
@@ -327,6 +408,10 @@ if __name__ == '__main__':
                 app.get_course_detail(op_type='VIDEO')
             elif command == 'audio':
                 app.get_course_detail(op_type='AUDIO')
+            elif command == 'audio':
+                app.get_course_detail(op_type='MARKDOWN')
+            elif command == 'audio':
+                app.get_course_detail(op_type='EPUB')
             elif command == 'all':
                 app.get_course_detail(op_type='ALL')
             elif command == 'login':

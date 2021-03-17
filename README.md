@@ -24,15 +24,20 @@ virtualenv venv
 pip3 install -r requirements.txt
 ```
 
+将HTML转换为PDF需要安装`wk<html>TOpdf`插件和`wk<html>TOimage`插件, 在 [https://wkhtmltopdf.org/downloads.html](https://wkhtmltopdf.org/downloads.html) 下载。
+
 # 配置文件
 
 `config.ini`是lagou-downloader的配置文件, 主要针对下载器核心的配置是`app`区块:
 
 - `request_freq`用来设置每个资源请求的频率, 默认5秒每个资源, 如果你有足够的资金, 可以购买代理池, 将该值设置为-1, 那么lagou-downloader将会不限制速率。
-
 - `cookie`是登录后整个Cookie的Base64编码, 可以使用[此网站](https://base64.us)进行编解码, 具体Cookie请在HTTP请求头中查找, 如下图所示:
-
     ![assets/lagou-downloader-cookie-preview.png](assets/lagou-downloader-cookie-preview.png)
+
+在`tools`区块用于配置lagou-downloader所需要的工具:
+
+- `wkhtmltopdf`用于配置生成PDF工具的路径
+- `wkhtmltoimage`用于配置生成图片工具的路径
 
 # 命令解释
 
