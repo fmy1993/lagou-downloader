@@ -28,9 +28,11 @@ pip3 install -r requirements.txt
 
 `config.ini`是lagou-downloader的配置文件, 主要针对下载器核心的配置是`app`区块:
 
-- `request_freq`用来设置每个资源请求的频率, 默认5秒每个资源, 如果你有足够的资金, 可以购买代理池, 将该值设置为-1, 那么lagou-downloader将会不限制速率
+- `request_freq`用来设置每个资源请求的频率, 默认5秒每个资源, 如果你有足够的资金, 可以购买代理池, 将该值设置为-1, 那么lagou-downloader将会不限制速率。
 
-- `cookie`是登录后整个Cookie的Base64编码, 可以使用[此网站](https://base64.us)进行编解码
+- `cookie`是登录后整个Cookie的Base64编码, 可以使用[此网站](https://base64.us)进行编解码, 具体Cookie请在HTTP请求头中查找, 如下图所示:
+
+    ![assets/lagou-downloader-cookie-preview.png](assets/lagou-downloader-cookie-preview.png)
 
 # 命令解释
 
@@ -57,3 +59,8 @@ pip3 install -r requirements.txt
 退出下载器, lagou-downloader会自动将未完成的任务保存app.dat文件, 下次启动lagou-downloader将会提示是否进行未完成的任务。
 
 ![assets/lagou-downloader-quit-command.png](assets/lagou-downloader-quit-command.png)
+
+# 其他说明
+
+lagou-downloader使用MIT协议发布, 仅作为交流学习使用, 下载后请在24小时内删除。
+
