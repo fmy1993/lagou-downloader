@@ -102,7 +102,7 @@ class App:
         print("LaGou Downloader")
         print("- Author: " + __author__)
         print("- Version: " + __version__)
-        print("- Python: " + sys.version)
+        print("- Python: " + str(sys.version_info[0]) + '.' + str(sys.version_info[1]) + '.' + str(sys.version_info[2]))
         print("- wk<html>TOpdf: " + pdfkit.__version__)
         print("- wk<html>TOimg: " + imgkit.__version__)
 
