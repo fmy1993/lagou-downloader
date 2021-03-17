@@ -446,9 +446,23 @@ class App:
                         else:
                             print('=>没有检测到wkhtmltoimage')
                 elif sys.platform == 'linux2':
-                    pass
+                    if os.path.exists(os.path.join('usr', 'local', 'bin', 'wkhtmltopdf')):
+                        self.__tools_pdfkit_conf_install_path = os.path.join('usr', 'local', 'bin', 'wkhtmltopdf')
+                    else:
+                        print('=>没有检测到wkhtmltopdf')
+                    if os.path.exists(os.path.join('usr', 'local', 'bin', 'wkhtmltoimage')):
+                        self.__tools_imgkit_conf_install_path = os.path.join('usr', 'local', 'bin', 'wkhtmltoimage')
+                    else:
+                        print('=>没有检测到wkhtmltoimage')
                 elif sys.platform == 'linux':
-                    pass
+                    if os.path.exists(os.path.join('usr', 'local', 'bin', 'wkhtmltopdf')):
+                        self.__tools_pdfkit_conf_install_path = os.path.join('usr', 'local', 'bin', 'wkhtmltopdf')
+                    else:
+                        print('=>没有检测到wkhtmltopdf')
+                    if os.path.exists(os.path.join('usr', 'local', 'bin', 'wkhtmltoimage')):
+                        self.__tools_imgkit_conf_install_path = os.path.join('usr', 'local', 'bin', 'wkhtmltoimage')
+                    else:
+                        print('=>没有检测到wkhtmltoimage')
         except KeyError:
             pass
 
