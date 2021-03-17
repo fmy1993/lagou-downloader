@@ -4,7 +4,7 @@
 
 # 安装环境
 
-lagou-downloader使用Python 3.x开发, 所以你应该具备`python3`和`pip3`指令。你可以到[Python官网下载中心](https://www.python.org/downloads/)下载到最新的Python版本。将lagou-downloader仓库Clone到本地:
+lagou-downloader使用Python 3.x开发, 所以你应该具备`python3`和`pip3`指令。你可以到 [Python官网下载中心](https://www.python.org/downloads/) 下载到最新的Python版本。将lagou-downloader仓库Clone到本地:
 
 ```
 git clone https://github.com/bluemiaomiao/lagou-downloader.git
@@ -53,6 +53,12 @@ pip3 install -r requirements.txt
 登录后可以列出购买的全部课程, 试读课程也会列出来。
 
 ![assets/lagou-downloader-list-command.png](assets/lagou-downloader-list-command.png)
+
+## detail
+
+显示专栏的课程详情。输出专栏ID即可, 如果输入quit那么将会推出详情查询流程。
+
+![assets/lagou-downloader-detail-command.png](assets/lagou-downloader-detail-command.png)
 
 ## quit & Control-C(Ctrl+C)
 
