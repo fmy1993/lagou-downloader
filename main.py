@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 # -*-coding:utf-8-*-
 
 import base64
@@ -293,7 +294,7 @@ class App:
         self.__create_audio_file()
 
     def __save_tasks(self, items):
-        print("=>任务持久化成   功")
+        print("=>任务持久化成功")
 
 
 if __name__ == '__main__':
@@ -301,7 +302,18 @@ if __name__ == '__main__':
 
     try:
         while True:
-            command = input('=>请输入子命令: ')
+            command = None
+            try:
+                command = input('=>请输入子命令: ')
+            except SyntaxError:
+                continue
+
+            if command is None:
+                continue
+
+            if len(command) <= 0:
+                continue
+
             if command == 'help':
                 app.show_usage_info()
             elif command == 'quit':
